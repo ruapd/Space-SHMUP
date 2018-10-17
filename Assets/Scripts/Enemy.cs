@@ -33,13 +33,13 @@ public class Enemy : MonoBehaviour
 	void Update () 
     {
         Move();	
-        if (bndCheck !=null && !bndCheck.isOnScreen)
+        if (bndCheck !=null && bndCheck.offDown)
         {
-            //check to make sure it's gone off the bottom of the screen
-            if ( pos.y < bndCheck.camHeight - bndCheck.radius)
-            {
+            ////check to make sure it's gone off the bottom of the screen
+            //if ( pos.y < bndCheck.camHeight - bndCheck.radius)
+            //{
                 Destroy(gameObject);
-            }
+            //}
         }
 	}
 
@@ -48,5 +48,19 @@ public class Enemy : MonoBehaviour
         Vector3 tempPos = pos;
         tempPos.y -= speed * Time.deltaTime;
         pos = tempPos;
+    }
+
+    void OnCollisionEnter(Collision coll)
+    {
+        GameObject otherGO = coll.gameObject;
+        if (otherGO.tag == "ProjectileHero") 
+        {
+            Destroy(otherGO);
+            Destroy(gameObject);
+        }
+        else
+        {
+            print("Enemy hit by non-ProjectileHero: " + otherGO.name);
+        }
     }
 }
