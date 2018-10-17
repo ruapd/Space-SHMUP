@@ -12,6 +12,7 @@ public class Hero : MonoBehaviour
 
     [Header("Set Dynamically")]
     public float shieldLevel = 1;
+    private GameObject lastTriggerGo = null;
 
     private void Awake()
     {
@@ -43,5 +44,26 @@ public class Hero : MonoBehaviour
 
         //rotate the ship to make it feel more dynamic.
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Transform rootT = other.gameObject.transform.root;
+        GameObject go = rootT.gameObject;
+        //print("Triggered: " + go.name);
+        if (go == lastTriggerGo)
+        {
+            return;
+        }
+        lastTriggerGo = go;
+
+        if(go.tag == "Enemy")
+        {
+            shieldLevel--;
+            Destroy(go);
+        }
+        else{
+            print("Triggered by non-Enemy: " + go.name);
+        }
     }
 }
