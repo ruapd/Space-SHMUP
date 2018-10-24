@@ -110,6 +110,7 @@ public class Weapon : MonoBehaviour
                 p = MakeProjectile();
                 p.rigid.velocity = vel;
                 break;
+
             case WeaponType.spread:
                 p = MakeProjectile(); //make middle projectile
                 p.rigid.velocity = vel;
