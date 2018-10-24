@@ -9,12 +9,27 @@ public class Enemy : MonoBehaviour
     public float fireRate = 0.3f;
     public float health = 10;
     public int score = 100;
+    public float showDamageDuration = 0.1f;
+
+    [Header("Set Dynamically: Enenmy")]
+    public Color[] originalColors;
+    public Material[] materials;
+    public bool showingDamage;
+    public float damageDoneTime;
+    public bool notifiedOfDestruction = false;
 
     protected BoundsCheck bndCheck;
 
     void Awake()
     {
         bndCheck = GetComponent<BoundsCheck>();
+        //Get materials and colors fo this GameObject and its children
+        materials = Utils.GetAllMaterials(gameObject);
+        originalColors = new Color[materials.Length];
+        for (int i = 0; i < materials.Length; i++)
+        {
+            originalColors[i] = materials[i].color;
+        }
     }
 
     public Vector3 pos
@@ -33,6 +48,12 @@ public class Enemy : MonoBehaviour
 	void Update () 
     {
         Move();	
+
+        if (showingDamage && Time.time > damageDoneTime)
+        {
+            UnShowDamage();
+        }
+
         if (bndCheck !=null && bndCheck.offDown)
         {
             ////check to make sure it's gone off the bottom of the screen
@@ -75,8 +96,8 @@ public class Enemy : MonoBehaviour
                 Destroy(otherGO);
                 break;
             }
-
             //hurt this enemy
+            ShowDamage();
             //get the damage amount from the Main WEAP_DICT
             health -= Main.GetWeaponDefinition(p.type).damageOnHit;
             if(health <=0)
@@ -90,5 +111,24 @@ public class Enemy : MonoBehaviour
                 print("Enemy hit by non-ProjectileHero: " + otherGO.name);
                 break;
         }
+    }
+
+    void ShowDamage()
+    {
+        foreach (Material m in materials)
+        {
+            m.color = Color.red;
+        }
+        showingDamage = true;
+        damageDoneTime = Time.time + showDamageDuration;
+    }
+
+    void UnShowDamage()
+    {
+        for (int i = 0; i < materials.Length; i++)
+        {
+            materials[i].color = originalColors[i];
+        }
+        showingDamage = false;
     }
 }
