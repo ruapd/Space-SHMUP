@@ -33,7 +33,7 @@ public class Hero : MonoBehaviour
         else{
             Debug.LogError("Hero.Awake() - Attmepted to assign second Hero.S!");
         }
-        fireDelegate += TempFire;
+        //fireDelegate += TempFire;
     }
 	
 	// Update is called once per frame
