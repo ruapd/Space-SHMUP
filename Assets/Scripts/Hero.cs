@@ -25,7 +25,7 @@ public class Hero : MonoBehaviour
     private float _shieldLevel = 1;
 
 
-    private void Awake()
+    void Start()
     {
         if( S == null)
         {
@@ -35,6 +35,8 @@ public class Hero : MonoBehaviour
             Debug.LogError("Hero.Awake() - Attmepted to assign second Hero.S!");
         }
         //fireDelegate += TempFire;
+        ClearWeapons();
+        weapons[0].SetType(WeaponType.blaster);
     }
 	
 	// Update is called once per frame
